@@ -1,6 +1,16 @@
 <?php
-// Include configuration file
+
 require_once 'config.php';
+include('../includes/config.php');
+session_start();
+$useremail=$_SESSION['login'];
+$usersql = "SELECT * from tblusers where `EmailId`=':useremail'";
+$userquery = $dbh -> prepare($usersql);
+$userquery -> bindParam(':useremail',$useremail, PDO::PARAM_STR);
+$userquery->execute();
+$userresult=$userquery->fetchAll(PDO::FETCH_OBJ);
+echo $useremail;
+
 $itemName = $_GET['title'];
 $itemNumber = $_GET['id'];
 ?>
@@ -39,7 +49,7 @@ $itemNumber = $_GET['id'];
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input type="text" class="form-control" autocomplete="off" maxlength="20"name="email" id="email">
+                                    <input type="text" value="<?= $useremail ?>" class="form-control" autocomplete="off" maxlength="20"name="email" id="email">
                                 </div>
                                  <div class="form-group">
                                     <label>card Expiry</label>

@@ -1,8 +1,14 @@
 <?php 
 session_start();
-include('includes/config.php');
-error_reporting(0);
+include('includes/config.php'); 
+// $useremail=$_SESSION['login'];
 
+// $usersql = "SELECT * from tblusers where `EmailId`=':useremail'";
+// $userquery = $dbh -> prepare($usersql);
+// $userquery -> bindParam(':useremail',$useremail, PDO::PARAM_STR);
+// $userquery->execute();
+// $userresult=$userquery->fetchAll(PDO::FETCH_OBJ);
+error_reporting(0);
 ?>
 
 <!DOCTYPE HTML>
