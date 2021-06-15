@@ -1,3 +1,4 @@
+
 <?php
 if(isset($_POST['emailsubscibe']))
 {
@@ -29,6 +30,10 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
 }
 }
 ?>
+
+<head>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
 
 <footer>
   <div class="footer-top">
