@@ -72,7 +72,7 @@ else{
   <div class="dark-overlay"></div>
 </section>
 <!-- /Page Header--> 
-
+<!--  profile -general-settings -->
 <?php 
 $useremail=$_SESSION['login'];
 $sql = "SELECT * from tblusers where EmailId=:useremail ";
@@ -81,8 +81,6 @@ $query -> bindParam(':useremail',$useremail, PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
 $cnt=1;
-
-
 if($query->rowCount() > 0)
 {
 foreach($results as $result)
@@ -102,12 +100,15 @@ foreach($results as $result)
     <div class="row">
       <div class="col-md-3 col-sm-3">
        <?php include('includes/sidebar.php');?>
-   
-      <div class="col-md-8 col-sm-8">
-        <div class="profile_wrap">
-          <h5 class="uppercase underline">My Booikngs </h5>
-          <div class="my_vehicles_list">
-            <ul class="vehicle_listing">
+
+<!-- My bookings -->  
+<div class="col-md-8 col-sm-8">
+<div class="profile_wrap">
+<h5 class="uppercase underline">My Booikngs </h5>
+<div class="my_vehicles_list">
+<ul class="vehicle_listing">
+
+ <!-- My bookings script -->
 <?php 
 $useremail=$_SESSION['login'];
  $sql = "SELECT tblvehicles.Vimage1 as Vimage1,tblvehicles.VehiclesTitle,tblvehicles.id as vid,tblbrands.BrandName,tblbooking.FromDate,tblbooking.ToDate,tblbooking.message,tblbooking.Status,tblvehicles.PricePerDay,DATEDIFF(tblbooking.ToDate,tblbooking.FromDate) as totaldays,tblbooking.BookingNumber  from tblbooking join tblvehicles on tblbooking.VehicleId=tblvehicles.id join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand where tblbooking.userEmail=:useremail order by tblbooking.id desc";
@@ -123,16 +124,20 @@ foreach($results as $result)
 
 <li>
     <h4 style="color:red">Booking No #<?php echo htmlentities($result->BookingNumber);?></h4>
-                <div class="vehicle_img"> <a href="vehical-details.php?vhid=<?php echo htmlentities($result->vid);?>"><img src="admin/img/vehicleimages/<?php echo htmlentities($result->Vimage1);?>" alt="image"></a> </div>
-                <div class="vehicle_title">
+    <div class="vehicle_img"> 
+      <a href="vehical-details.php?vhid=<?php echo htmlentities($result->vid);?>"><img src="admin/img/vehicleimages/<?php echo htmlentities($result->Vimage1);?>" alt="image"></a> 
+    </div>
+      
+    <div class="vehicle_title">
+      <h6><a href="vehical-details.php?vhid=<?php echo htmlentities($result->vid);?>"> <?php echo htmlentities($result->BrandName);?> , <?php echo htmlentities($result->VehiclesTitle);?></a></h6>
+      <p><b>From </b> <?php echo htmlentities($result->FromDate);?> <b>To </b> <?php echo htmlentities($result->ToDate);?></p>
+         <div style="float: left"><p><b>Message:</b> <?php echo htmlentities($result->message);?> </p></div>
+    </div>
 
-                  <h6><a href="vehical-details.php?vhid=<?php echo htmlentities($result->vid);?>"> <?php echo htmlentities($result->BrandName);?> , <?php echo htmlentities($result->VehiclesTitle);?></a></h6>
-                  <p><b>From </b> <?php echo htmlentities($result->FromDate);?> <b>To </b> <?php echo htmlentities($result->ToDate);?></p>
-                  <div style="float: left"><p><b>Message:</b> <?php echo htmlentities($result->message);?> </p></div>
-                </div>
-                <?php if($result->Status==1)
-                { ?>
-                <div class="vehicle_status"> <a href="#" class="btn outline btn-xs active-btn">Confirmed</a>
+    <!--  booking conformation script -->
+        <?php if($result->Status==1)
+          { ?>
+        <div class="vehicle_status"> <a href="#" class="btn outline btn-xs active-btn">Confirmed</a>
                            <div class="clearfix"></div>
         </div>
 
@@ -148,66 +153,76 @@ foreach($results as $result)
             <div class="clearfix"></div>
         </div>
                 <?php } ?>
-       
+         <!--  / booking conformation script -->
               </li>
-              <a href="../carrental/stripepayment/index.php?price=<?php echo htmlentities($result->PricePerDay);?>&id=<?php echo htmlentities($result->vid);?>&title=<?php echo htmlentities($result->VehiclesTitle);?>"class="btn btn-success">paynow</a>
+<!-- transaction diplay code -->
+<!--  -->
 
-              <?php
+<?php
 // order detail 
-$orderSql = "SELECT * FROM `orders` where email=:useremail and item_number=:vid";
+$useremail=$_SESSION['login'];
+$orderSqlt = "SELECT item_number, txn_id as tid,paid_amount as pa,payment_status as ps FROM `orders` WHERE `email`='$useremail' and `item_number`='$result->vid'";
+// echo $orderSql;
+$orderQueryt = $dbh->prepare($orderSqlt);
+$orderQueryt->execute();
+$ordert=$orderQueryt->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($orderQueryt->rowCount() <= 0)
+{
+?>
+
+<a href="../carreants/stripepayment/index.php?price=<?php echo htmlentities($result->PricePerDay);?>&id=<?php echo htmlentities($result->vid);?>&title=<?php echo htmlentities($result->VehiclesTitle);?>"class="btn btn-success">paynow</a>
+
+<?php 
+}
+if($orderQueryt->rowCount() > 0)
+{
+foreach($ordert as $ot)
+{ 
+?>                                
+            <?php 
+  }}
+
+?>
+
+
+<?php
+// order detail 
+$useremail=$_SESSION['login'];
+$orderSql = "SELECT item_number, txn_id as tid,paid_amount as pa,payment_status as ps FROM `orders` WHERE `email`='$useremail' and `item_number`='$result->vid'";
+// echo $orderSql;
 $orderQuery = $dbh->prepare($orderSql);
-$orderQuery->bindParam(':useremail',$useremail, PDO::PARAM_STR);
-$orderQuery->bindParam(':item_number',$result->vid, PDO::PARAM_STR);
-echo $useremail;
-echo $result->vid;
+// $orderQuery->bindParam(':useremail',$useremail, PDO::PARAM_STR);
+// $orderQuery->bindParam(':item_number',$result->vid, PDO::PARAM_STR);
 $orderQuery->execute();
 $order=$orderQuery->fetchAll(PDO::FETCH_OBJ);
-var_dump($order);
-              ?>
+$cnt=1;
+if($orderQuery->rowCount() > 0)
+{
+foreach($order as $o)
+{  
+?>
 
-
-                <div class="row">
+                              <div class="row">
                 <div class="text-center">
                     <h1>Details</h1>
                 </div>
                 </span>
                 <table class="table table-hover">
-                    <tbody>
-                      <tr>
-                <td>
-                    <p><b>Reference Number:</b></p>
-                </td>
-                <td>
-                    <p><?php echo $payment_id; ?></p>
-                </td>
-            </tr>
-<tr>
-                <td>
-                 <p><b>Transaction ID:</b></p>
-                </td>
-                <td>
-                    <p><?php echo $transactionID; ?></p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><b>Paid Amount:</b></p>
-                </td>
-                <td>
-                    <p><?php echo $paidAmount.' '.$paidCurrency; ?></p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                 <p><b>Payment Status:</b></p>
-                </td>
-                <td>
-                    <p><?php echo $payment_status; ?></p>
-                </td>
-            </tr>
-                    </tbody>
-                </table>
+                  <th>Transaction ID</th>
+                 <th>Paid Amount</th>
+                 <th>Payment Status</th>
+                 <tbody>
+                   <tr>
+                     <td><?php echo ($o->tid); ?> </td>
+                     <td><?php echo ($o->pa); ?></td>
+                     <td><?php echo ($o->ps); ?></td>
+                   </tr>
+                 </tbody>
+</table>
+
             </div>
+            <?php }} ?>
 
 
 <h5 style="color:blue">Invoice</h5>
