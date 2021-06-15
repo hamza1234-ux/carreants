@@ -1,20 +1,11 @@
 <?php 
 session_start();
 include('includes/config.php'); 
-// $useremail=$_SESSION['login'];
-
-// $usersql = "SELECT * from tblusers where `EmailId`=':useremail'";
-// $userquery = $dbh -> prepare($usersql);
-// $userquery -> bindParam(':useremail',$useremail, PDO::PARAM_STR);
-// $userquery->execute();
-// $userresult=$userquery->fetchAll(PDO::FETCH_OBJ);
 error_reporting(0);
 ?>
-
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-
 <title>Car Rental </title>
 <!--Bootstrap -->
 <link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css">
@@ -23,7 +14,7 @@ error_reporting(0);
 <link rel="stylesheet" href="assets/css/owl.transitions.css" type="text/css">
 <link href="assets/css/slick.css" rel="stylesheet">
 <link href="assets/css/bootstrap-slider.min.css" rel="stylesheet">
-<link href="assets/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 		<link rel="stylesheet" id="switcher-css" type="text/css" href="assets/switcher/css/switcher.css" media="all" />
 		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/red.css" title="red" media="all" data-default-color="true" />
 		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/orange.css" title="orange" media="all" />
@@ -31,7 +22,6 @@ error_reporting(0);
 		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/pink.css" title="pink" media="all" />
 		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/green.css" title="green" media="all" />
 		<link rel="alternate stylesheet" type="text/css" href="assets/switcher/css/purple.css" title="purple" media="all" />
-
 </head>
 <body>
 

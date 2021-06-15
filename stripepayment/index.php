@@ -1,5 +1,4 @@
 <?php
-
 require_once 'config.php';
 include('../includes/config.php');
 session_start();
@@ -9,90 +8,80 @@ $userquery = $dbh -> prepare($usersql);
 $userquery -> bindParam(':useremail',$useremail, PDO::PARAM_STR);
 $userquery->execute();
 $userresult=$userquery->fetchAll(PDO::FETCH_OBJ);
-echo $useremail;
-
 $itemName = $_GET['title'];
 $itemNumber = $_GET['id'];
 ?>
+<!-- bootstrap cdn -->
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
+<!-- /bootstrap cdn -->
+<div class="col-md-6 offset-md-3">
+    <span class="anchor" id="formPayment"></span>
+     <hr class="my-5">
 
-   <div class="col-md-6 offset-md-3">
-                    <span class="anchor" id="formPayment"></span>
-                    <hr class="my-5">
-
-                    <!-- form card cc payment -->
-                    <div class="card card-outline-secondary">
-                        <div class="card-body">
-                            <h3 class="text-center">Credit Card Payment</h3>
-                            <hr>
-                            <div class="alert alert-info p-2 pb-3">
-                                <a class="close font-weight-normal initialism" data-dismiss="alert" href="#"><samp>×</samp></a> 
-                                CVC code is required.
-                            </div>
-
-                            <div id="paymentResponse"></div>
-  
-                            <form class="form" role="form" action="payment.php" method="POST" id="paymentFrm" autocomplete="off">
-                                <div class="form-group">
-                                    <label for="cc_name">Card Holder's Name</label>
-                                    <input type="text" class="form-control"  name="name" id="name" required="required">
-                                </div>
-                                <input type="hidden" name="id" value="<?php echo htmlentities($itemNumber);?>">
-                                <input type="hidden" name="title" value="<?php echo htmlentities($itemName);?>">
-                                <div class="form-group">
-                                    <label>Card Number</label>
-                                    <div id="cardnumber" class="form-control"></div>
-
-                                </div>
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="text" value="<?= $useremail ?>" class="form-control" autocomplete="off" maxlength="20"name="email" id="email">
-                                </div>
-                                 <div class="form-group">
-                                    <label>card Expiry</label>
-                                    <div id="card_expiry" class="form-control"></div>
-
-                                </div>
-                                <div class="form-group">
-                                    <label>CVC CODE</label>
-                                    <div id="card_cvc" class="field form-control"></div>
-
-                                </div>
-                                <div class="form-group">
-                                    <label>COUPON CODE</label>
-                                    <input type="text" class="form-control"  name="coupon_code" id="coupon_code">
-                                </div>
-                               
-                                    
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-12">Amount</label>
-                                </div>
-                                <div class="form-inline">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                                        <input type="text" class="form-control text-right" id="price" name="price"placeholder="39" value="<?= $_GET['price'] ?>">
-                                        <div class="input-group-append"><span class="input-group-text">.00</span></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <button type="reset" class="btn btn-default btn-lg btn-block">Cancel</button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button type="submit" class="btn btn-success btn-lg btn-block" id="payBtn">Submit</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /form card cc payment -->
-                    <script src="https://js.stripe.com/v3/"></script>
-
+<!-- form card cc payment -->
+<div class="card card-outline-secondary">
+<div class="card-body">
+<h3 class="text-center">Credit Card Payment</h3>
+<hr>
+<div class="alert alert-info p-2 pb-3">
+    <a class="close font-weight-normal initialism" data-dismiss="alert" href="#"><samp>×</samp></a> CVC code is required.
+</div>
+<!-- payment response -->
+<div id="paymentResponse"></div>
+<form class="form" role="form" action="payment.php" method="POST" id="paymentFrm" autocomplete="off">
+<div class="form-group">
+<label for="cc_name">Card Holder's Name</label>
+<input type="text" class="form-control"  name="name" id="name" required="required">
+</div>
+   <input type="hidden" name="id" value="<?php echo htmlentities($itemNumber);?>">
+   <input type="hidden" name="title" value="<?php echo htmlentities($itemName);?>">
+ <div class="form-group">
+<label>Card Number</label>
+<div id="cardnumber" class="form-control"></div>
+</div>
+<div class="form-group">
+<label>Email</label>
+<input type="text" value="<?= $useremail ?>" class="form-control" autocomplete="off" maxlength="20"name="email" id="email" readonly>
+</div>
+<div class="form-group">
+<label>card Expiry</label>
+<div id="card_expiry" class="form-control"></div>
+</div>
+<div class="form-group">
+<label>CVC CODE</label>
+<div id="card_cvc" class="field form-control"></div>
+</div>
+<div class="form-group">
+<label>COUPON CODE</label>
+<input type="text" class="form-control"  name="coupon_code" id="coupon_code">
+</div>
+</div>
+<div class="row">
+<label class="col-md-12">Amount</label>
+</div>
+<div class="form-inline">
+<div class="input-group">
+<div class="input-group-prepend"><span class="input-group-text">$</span></div>
+<input type="text" class="form-control text-right" id="price" name="price"placeholder="39" value="<?= $_GET['price'] ?>">
+<div class="input-group-append"><span class="input-group-text">.00</span></div>
+</div>
+</div>
+<hr>
+<div class="form-group row">
+<div class="col-md-6">
+<button type="reset" class="btn btn-default btn-lg btn-block">Cancel</button>
+</div>
+<div class="col-md-6">
+<button type="submit" class="btn btn-success btn-lg btn-block" id="payBtn">Submit</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- /form card cc payment -->
+<script src="https://js.stripe.com/v3/"></script>
 <script>
 // Create an instance of the Stripe object
 // Set your publishable API key

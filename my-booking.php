@@ -111,7 +111,7 @@ foreach($results as $result)
  <!-- My bookings script -->
 <?php 
 $useremail=$_SESSION['login'];
- $sql = "SELECT tblvehicles.Vimage1 as Vimage1,tblvehicles.VehiclesTitle,tblvehicles.id as vid,tblbrands.BrandName,tblbooking.FromDate,tblbooking.ToDate,tblbooking.message,tblbooking.Status,tblvehicles.PricePerDay,DATEDIFF(tblbooking.ToDate,tblbooking.FromDate) as totaldays,tblbooking.BookingNumber  from tblbooking join tblvehicles on tblbooking.VehicleId=tblvehicles.id join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand where tblbooking.userEmail=:useremail order by tblbooking.id desc";
+ $sql = "SELECT tblvehicles.Vimage1 as Vimage1,tblvehicles.VehiclesTitle,tblvehicles.id as vid,tblbrands.BrandName,tblbooking.id as booking_id,tblbooking.FromDate,tblbooking.ToDate,tblbooking.message,tblbooking.Status,tblvehicles.PricePerDay,DATEDIFF(tblbooking.ToDate,tblbooking.FromDate) as totaldays,tblbooking.BookingNumber  from tblbooking join tblvehicles on tblbooking.VehicleId=tblvehicles.id join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand where tblbooking.userEmail=:useremail order by tblbooking.id desc";
 $query = $dbh -> prepare($sql);
 $query-> bindParam(':useremail', $useremail, PDO::PARAM_STR);
 $query->execute();
@@ -161,7 +161,7 @@ foreach($results as $result)
 <?php
 // order detail 
 $useremail=$_SESSION['login'];
-$orderSqlt = "SELECT item_number, txn_id as tid,paid_amount as pa,payment_status as ps FROM `orders` WHERE `email`='$useremail' and `item_number`='$result->vid'";
+$orderSqlt = "SELECT item_number, txn_id as tid,paid_amount as pa,payment_status as ps FROM `orders` WHERE `email`='$useremail' and `item_number`='$result->booking_id'";
 // echo $orderSql;
 $orderQueryt = $dbh->prepare($orderSqlt);
 $orderQueryt->execute();
@@ -171,7 +171,7 @@ if($orderQueryt->rowCount() <= 0)
 {
 ?>
 
-<a href="../carreants/stripepayment/index.php?price=<?php echo htmlentities($result->PricePerDay);?>&id=<?php echo htmlentities($result->vid);?>&title=<?php echo htmlentities($result->VehiclesTitle);?>"class="btn btn-success">paynow</a>
+<a href="../carreants/stripepayment/index.php?price=<?php echo htmlentities($result->PricePerDay);?>&id=<?php echo htmlentities($result->booking_id);?>&title=<?php echo htmlentities($result->VehiclesTitle);?>"class="btn btn-success">paynow</a>
 
 <?php 
 }
@@ -189,7 +189,7 @@ foreach($ordert as $ot)
 <?php
 // order detail 
 $useremail=$_SESSION['login'];
-$orderSql = "SELECT item_number, txn_id as tid,paid_amount as pa,payment_status as ps FROM `orders` WHERE `email`='$useremail' and `item_number`='$result->vid'";
+$orderSql = "SELECT item_number, txn_id as tid,paid_amount as pa,payment_status as ps FROM `orders` WHERE `email`='$useremail' and `item_number`='$result->booking_id'";
 // echo $orderSql;
 $orderQuery = $dbh->prepare($orderSql);
 // $orderQuery->bindParam(':useremail',$useremail, PDO::PARAM_STR);

@@ -70,6 +70,7 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
 <link href="assets/css/bootstrap-slider.min.css" rel="stylesheet">
 <!--FontAwesome Font Style -->
 <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+<link href="assets/fonts/fontawesome-webfont3e6e.html" >
 
 <!-- SWITCHER -->
 		<link rel="stylesheet" id="switcher-css" type="text/css" href="assets/switcher/css/switcher.css" media="all" />
