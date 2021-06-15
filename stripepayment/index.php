@@ -51,6 +51,10 @@ $itemNumber = $_GET['id'];
                                     <div id="card_cvc" class="field form-control"></div>
 
                                 </div>
+                                <div class="form-group">
+                                    <label>COUPON CODE</label>
+                                    <input type="text" class="form-control"  name="coupon_code" id="coupon_code">
+                                </div>
                                
                                     
                                 </div>

@@ -11,8 +11,8 @@ define('STRIPE_API_KEY', 'sk_test_51IzjGCLGGre7P6tESSOoOrZXJcojXNYmtVaTZ9c5PaupM
 define('STRIPE_PUBLISHABLE_KEY', 'pk_test_51IzjGCLGGre7P6tEygiJ8UF7KNNCCywrhOfu4xNi5kO3Zc9lypOzBCXk7NOCPFeyqiIJJhsb8A42oV24Q8hEfduv00uQ08gagF'); 
   
 // Database configuration  
-define('DB_HOST', "localhost"); 
-define('DB_USERNAME', 'root'); 
-define('DB_PASSWORD', ''); 
-define('DB_NAME', 'carrental');
+define('db_host', "localhost"); 
+define('db_username', 'root'); 
+define('db_password', ''); 
+define('db_name', 'carrental');
 ?>

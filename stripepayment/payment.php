@@ -1,12 +1,15 @@
 <?php 
 // Include configuration file  
 require_once 'config.php'; 
+ // require_once'../includes/config.php';
+
  
 $payment_id = $statusMsg = ''; 
 $ordStatus = 'error';
 $itemPrice = $_POST['price'];
 $itemName = $_POST['title'];
 $itemNumber = $_POST['id'];
+$couponCode = $_POST['coupon_code'];
  
 // Check whether stripe token is not empty 
 if(!empty($_POST['stripeToken'])){ 
@@ -33,9 +36,30 @@ if(!empty($_POST['stripeToken'])){
     } 
      
     if(empty($api_error) && $customer){  
+        include('../includes/config.php');
+
+        // query where select coupon code from coupon table where status is 1
+        $couponsql = "SELECT discount_percentage FROM coupons WHERE status= 1 and code=:coupon_code";
+        $couponQuery = $dbh->prepare($couponsql);
+        $couponQuery->bindParam(':coupon_code',$couponCode, PDO::PARAM_STR);
+        $couponQuery->execute();
+        $couponresult=$couponQuery->fetchAll(PDO::FETCH_OBJ);
+        // var_dump($couponresult->discount_percentage);die();
+
+        if (count($couponresult) > 0) {
+            $discount = ($couponresult[0]->discount_percentage / 100) * $itemPrice;
+            
+            $itemPriceCents = $itemPrice - $discount;
+            // echo $itemPriceCents;die();
+        }
+        else {
+            $itemPriceCents = ($itemPrice); 
+        }
+
+        
          
         // Convert price to cents 
-        $itemPriceCents = ($itemPrice); 
+        
          
         // Charge a credit or a debit card 
         try {  
@@ -61,13 +85,15 @@ if(!empty($_POST['stripeToken'])){
                 $paidAmount = $chargeJson['amount']; 
                 $paidAmount = ($paidAmount); 
                 $paidCurrency = $chargeJson['currency']; 
-                $payment_status = $chargeJson['status']; 
+                $payment_status = $chargeJson['status'];
+                // var_dump($chargeJson);die();
                  
                 // Include database connection file  
                 include_once 'dbConnect.php'; 
                  
                 // Insert tansaction data into the database 
-                $sql = "INSERT INTO orders(name,email,item_name,item_number,item_price,item_price_currency,paid_amount,paid_amount_currency,txn_id,payment_status,created,modified) VALUES('".$name."','".$email."','".$itemName."','".$itemNumber."','".$itemPrice."','".$currency."','".$paidAmount."','".$paidCurrency."','".$transactionID."','".$payment_status."',NOW(),NOW())"; 
+                $sql = "INSERT INTO orders(name,email,item_name,item_number,item_price,item_price_currency,paid_amount,paid_amount_currency,txn_id,payment_status,created,modified, code) VALUES('".$name."','".$email."','".$itemName."','".$itemNumber."','".$itemPrice."','".$currency."','".$paidAmount."','".$paidCurrency."','".$transactionID."','".$payment_status."',NOW(),NOW(),'".$couponCode . "')"; 
+                // echo  $sql;die();
                 $insert = $db->query($sql); 
                 $payment_id = $db->insert_id; 
                 
