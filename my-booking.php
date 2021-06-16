@@ -171,7 +171,7 @@ if($orderQueryt->rowCount() <= 0)
 {
 ?>
 
-<a href="../carreants/stripepayment/index.php?price=<?php echo htmlentities($result->PricePerDay);?>&id=<?php echo htmlentities($result->booking_id);?>&title=<?php echo htmlentities($result->VehiclesTitle);?>"class="btn btn-success">paynow</a>
+<a href="<?= BASE_URL ?>stripepayment/index.php?price=<?php echo htmlentities($result->PricePerDay);?>&id=<?php echo htmlentities($result->booking_id);?>&title=<?php echo htmlentities($result->VehiclesTitle);?>"class="btn btn-success">paynow</a>
 
 <?php 
 }
